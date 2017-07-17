@@ -2,6 +2,8 @@ var express = require('express');
 var expressLayouts = require('express-ejs-layouts');
 var low = require('lowdb');
 var path = require('path');
+var bodyParser = require('body-parser');
+var uuid = require('uuid');
 
 var app = express();
 
@@ -14,6 +16,10 @@ const db = low(path.join('data', 'db.json'));
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
 
+// bodyParser reads a form's input and stores it in request.body
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+app.use(bodyParser.json()); // support json encoded bodies
+
 // display home page
 app.get('/', function(req, res) {
   res.render('home')
@@ -22,8 +28,24 @@ app.get('/', function(req, res) {
 // display all books
 app.get('/books', function(req, res) {
   var books = db.get('books').value()
+  var authors = db.get('authors').value()
 
-  res.render('books', { books: books })
+  res.render('books', { books: books, authors: authors })
+})
+
+// create a new book
+app.post('/createBook', function(req, res) {
+  // get data from form
+  var title = req.body.title;
+  var author_id = req.body.author_id;
+
+  // insert new book into database
+  db.get('books')
+    .push({title: title, id: uuid(), author_id: author_id})
+    .write()
+
+  // redirect
+  res.redirect('/books')
 })
 
 // display one book
