@@ -59,6 +59,24 @@ app.get('/books/:id', function(req, res) {
   res.render('book', { book: book || {}, author: author || {}})
 })
 
+// display signup page
+app.get('/signup', function(req, res) {
+  res.render('signup')
+})
+
+// create user
+app.post('/signup', function(req, res) {
+  var username = req.body.username.trim();
+  var password = req.body.password.trim();
+  var password2 = req.body.password2.trim();
+
+  // create user
+  db.get('users')
+    .push({username: username, id: uuid(), password: password})
+    .write()
+  res.redirect('/')
+})
+
 // start server
 app.listen(3000, function(){
   console.log('server on port 3000')
