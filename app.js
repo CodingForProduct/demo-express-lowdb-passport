@@ -148,6 +148,12 @@ app.post('/login', function(req, res) {
   authService.authenticate(options, req, res, db);
 })
 
+// display logout
+app.get('/logout', function(req, res) {
+  req.session.destroy();
+  res.redirect('/')
+})
+
 // start server
 app.listen(3000, function(){
   console.log('server on port 3000')
