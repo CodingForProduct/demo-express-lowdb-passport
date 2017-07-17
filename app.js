@@ -1,6 +1,8 @@
 var express = require('express');
 var expressLayouts = require('express-ejs-layouts');
 var low = require('lowdb');
+var bodyParser = require('body-parser');
+const uuid = require('uuid');
 
 var app = express();
 
@@ -11,6 +13,10 @@ const db = low('db.json')
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
 
+// bodyParser reads a form's input and stores it in request.body
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+app.use(bodyParser.json()); // support json encoded bodies
+
 // display home page
 app.get('/', function(req, res) {
   res.render('home')
@@ -19,8 +25,9 @@ app.get('/', function(req, res) {
 // display all books
 app.get('/books', function(req, res) {
   var books = db.get('books').value()
+  var authors = db.get('authors').value()
 
-  res.render('books', { books: books })
+  res.render('books', { books: books, authors: authors })
 })
 
 // create a new book

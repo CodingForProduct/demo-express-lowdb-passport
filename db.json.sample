@@ -13,7 +13,13 @@
     }
   ],
   "authors": [
-    {"id": 1, "name": "author one"},
-    {"id": 2, "name": "author two"}
+    {
+      "id": "1",
+      "name": "author one"
+    },
+    {
+      "id": "2",
+      "name": "author two"
+    }
   ]
 }
