@@ -5,3 +5,22 @@
     <li><a href="/books/<%= book.id %>"><%= book.title %></a></li>
   <% }) %>
 </ul>
+
+<h1>New Book</h1>
+
+<form action="/createBook" method="post">
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input type="text" class="form-control" name="title" id="title">
+  </div>
+
+  <div class="form-group">
+    <label for="title">Author</label>
+    <select name="author_id" id="author">
+      <% authors.forEach(function(author){ %>
+        <option value="<%= author.id %>"><%= author.name %></option>
+      <% }) %>
+    </select>
+  </div>
+  <input type="submit" class="btn btn-primary">
+</form>
