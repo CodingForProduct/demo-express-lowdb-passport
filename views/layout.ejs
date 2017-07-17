@@ -11,9 +11,12 @@
           <li><a href="/books">Books</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="/signup">Signup</a></li>
-          <li><a href="/login">Login</a></li>
-          <li><a href="/logout">Logout</a></li>
+          <% if(isAuthenticated) { %>
+            <li><a href="/logout">Logout</a></li>
+          <% } else { %>
+            <li><a href="/signup">Signup</a></li>
+            <li><a href="/login">Login</a></li>
+          <% } %>
         </ul>
       </div><!-- /.container-fluid -->
     </nav>

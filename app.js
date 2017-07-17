@@ -21,6 +21,7 @@ const db = low(path.join('data', 'db.json'));
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
 
+
 // setup session
 var options = {
   store: new FileStore(),
@@ -36,6 +37,17 @@ if (app.get('env') === 'production') {
 }
  app.use(session(options))
 
+// make and user available isAuthenticated avaliable to every view
+app.use(function(req, res, next) {
+  if(req.session) {
+    res.locals.isAuthenticated = req.session.isAuthenticated;
+    res.locals.user = req.session.user;
+  } else {
+    res.locals.isAuthenticated = false;
+    res.locals.user = null;
+  }
+  next();
+})
 
 // bodyParser reads a form's input and stores it in request.body
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
