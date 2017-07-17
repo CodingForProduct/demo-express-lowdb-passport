@@ -2,6 +2,6 @@
 
 <ul>
   <% books.forEach(function(book) { %>
-    <li><%= book.title %></li>
+    <li><a href="/books/<%= book.id %>"><%= book.title %></a></li>
   <% }) %>
 </ul>

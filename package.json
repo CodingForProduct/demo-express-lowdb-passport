@@ -3,7 +3,8 @@
     "ejs": "^2.5.6",
     "express": "^4.15.3",
     "express-ejs-layouts": "^2.3.0",
-    "lowdb": "^0.16.2"
+    "lowdb": "^0.16.2",
+    "uuid": "^3.1.0"
   },
   "scripts": {
     "dev": "nodemon app.js"
