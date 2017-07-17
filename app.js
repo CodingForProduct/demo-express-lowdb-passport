@@ -5,6 +5,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 const uuid = require('uuid');
 var expressValidator = require('express-validator')
+var authService = require('./services/authService');
 
 var app = express();
 
@@ -98,7 +99,13 @@ app.post('/signup', function(req, res) {
   // else, create user
   } else {
     db.get('users')
-      .push({username: username, id: uuid(), password: password})
+      .push({
+        username: username,
+        // creates random id
+        id: uuid(),
+        // creates hash Password
+        password: authService.hashPassword(password)
+      })
       .write()
     res.redirect('/')
   }
