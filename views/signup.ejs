@@ -1,5 +1,12 @@
 <h1>Sign up</h1>
 
+<ul>
+<% errors.forEach(function(error) { %>
+  <li><%= error.msg %></li>
+<% }) %>
+</ul>
+
+
 <form action="/signup" method="post">
   <div class="form-group">
     <label for="username">Username</label>

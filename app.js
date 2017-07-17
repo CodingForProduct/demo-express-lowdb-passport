@@ -4,8 +4,10 @@ var low = require('lowdb');
 var path = require('path');
 var bodyParser = require('body-parser');
 const uuid = require('uuid');
+var expressValidator = require('express-validator')
 
 var app = express();
+
 
 // connect to database
 // path.join will take the parameters and create a path using the
@@ -19,6 +21,7 @@ app.use(expressLayouts);
 // bodyParser reads a form's input and stores it in request.body
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(bodyParser.json()); // support json encoded bodies
+app.use(expressValidator())
 
 // display home page
 app.get('/', function(req, res) {
@@ -61,20 +64,36 @@ app.get('/books/:id', function(req, res) {
 
 // display signup page
 app.get('/signup', function(req, res) {
-  res.render('signup')
+  res.render('signup', { errors: [] })
 })
 
 // create user
 app.post('/signup', function(req, res) {
+  // remove extra spaces
   var username = req.body.username.trim();
   var password = req.body.password.trim();
   var password2 = req.body.password2.trim();
 
-  // create user
-  db.get('users')
-    .push({username: username, id: uuid(), password: password})
-    .write()
-  res.redirect('/')
+  // validate form data
+  req.checkBody('username', 'Username must have at least 5 characters').isLength({min: 5});
+  req.checkBody('password', 'Password must have at least 5 characters').isLength({min: 5});
+  req.checkBody('username', 'Username is required').notEmpty();
+  req.checkBody('password', 'Password is required').notEmpty();
+  req.checkBody('password2', 'Confirm password is required').notEmpty();
+  req.checkBody('password', 'Password do not match').equals(password2);
+
+  var errors = req.validationErrors();
+  // if there are errors, display signup page
+  if (errors) {
+    return res.render('signup', {errors: errors})
+  // else, create user
+  } else {
+    db.get('users')
+      .push({username: username, id: uuid(), password: password})
+      .write()
+    res.redirect('/')
+  }
+
 })
 
 // start server
