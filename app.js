@@ -26,6 +26,32 @@ app.get('/books', function(req, res) {
   res.render('books', { books: books })
 })
 
+// create a new book
+app.post('/createBook', function(req, res) {
+  // get data from form
+  var title = req.body.title;
+  var author_id = req.body.author_id;
+
+  // insert new book into database
+  db.get('books')
+    .push({title: title, id: uuid(), author_id: author_id})
+    .write()
+
+  // redirect
+  res.redirect('/books')
+})
+
+// display one book
+app.get('/books/:id', function(req, res) {
+  var book = db.get('books').find({ id: req.params.id }).value()
+  var author;
+  if(book) {
+    author = db.get('authors').find({ id: book.author_id }).value()
+  }
+
+  res.render('book', { book: book || {}, author: author || {}})
+})
+
 // start server
 app.listen(3000, function(){
   console.log('server on port 3000')
