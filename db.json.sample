@@ -1,0 +1,19 @@
+{
+  "users": [],
+  "books": [
+    {
+      "title": "Book One",
+      "id": "4a588d9d-dd53-4e29-a548-4932cab38d4d",
+      "author_id": "1"
+    },
+    {
+      "title": "Book Two",
+      "id": "2a86570e-5b7e-491d-9249-264a0815f64f",
+      "author_id": "2"
+    }
+  ],
+  "authors": [
+    {"id": 1, "name": "author one"},
+    {"id": 2, "name": "author two"}
+  ]
+}
