@@ -86,6 +86,15 @@ app.post('/signup', function(req, res) {
   // if there are errors, display signup page
   if (errors) {
     return res.render('signup', {errors: errors})
+  }
+
+  // get all usernames
+  var usernames = db.get('users').map('username').value()
+  // check if username is unique
+  var usernameIsUnique = !usernames.includes(username)
+
+  if (usernameIsUnique === false) {
+    return res.render('signup', {errors: [{ msg: 'This username is already taken'}]})
   // else, create user
   } else {
     db.get('users')
