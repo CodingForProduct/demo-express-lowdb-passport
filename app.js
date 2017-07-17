@@ -4,7 +4,9 @@ var low = require('lowdb');
 var path = require('path');
 var bodyParser = require('body-parser');
 const uuid = require('uuid');
-var expressValidator = require('express-validator')
+var expressValidator = require('express-validator');
+var session = require('express-session');
+var FileStore = require('session-file-store')(session);
 var authService = require('./services/authService');
 
 var app = express();
@@ -19,6 +21,22 @@ const db = low(path.join('data', 'db.json'));
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
 
+// setup session
+var options = {
+  store: new FileStore(),
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {}
+};
+
+if (app.get('env') === 'production') {
+  app.set('trust proxy', 1) // trust first proxy
+  options.cookie.secure = true // serve secure cookies
+}
+ app.use(session(options))
+
+
 // bodyParser reads a form's input and stores it in request.body
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(bodyParser.json()); // support json encoded bodies
@@ -26,6 +44,7 @@ app.use(expressValidator())
 
 // display home page
 app.get('/', function(req, res) {
+  console.log(req.session)
   res.render('home')
 })
 
@@ -110,6 +129,23 @@ app.post('/signup', function(req, res) {
     res.redirect('/')
   }
 
+})
+
+// display login page
+app.get('/login', function(req, res) {
+  res.render('login', { errors: [] })
+})
+
+app.post('/login', function(req, res) {
+  var options = {
+    password: req.body.password.trim(),
+    username: req.body.username.trim(),
+    successRedirectUrl: '/',
+    loginTemplate: 'login',
+  }
+  // authenticate assumes there is a 'users' table with fields 'username'
+  // and 'password'
+  authService.authenticate(options, req, res, db);
 })
 
 // start server
