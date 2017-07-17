@@ -26,6 +26,17 @@ app.get('/books', function(req, res) {
   res.render('books', { books: books })
 })
 
+// display one book
+app.get('/books/:id', function(req, res) {
+  var book = db.get('books').find({ id: req.params.id }).value()
+  var author;
+  if(book) {
+    author = db.get('authors').find({ id: book.author_id }).value()
+  }
+
+  res.render('book', { book: book || {}, author: author || {}})
+})
+
 // start server
 app.listen(3000, function(){
   console.log('server on port 3000')
