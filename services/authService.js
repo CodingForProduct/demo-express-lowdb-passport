@@ -11,7 +11,7 @@ function comparePassword(plaintextPassword, hashPassword) {
   return bcrypt.compareSync(plaintextPassword, hashPassword);
 }
 
-exports.authenticate = function(options, req, res, db) {
+exports.login = function(options, req, res, db) {
   // check if username exists in database
   var user = db.get('users').find({ username: options.username }).value()
   if(user) {

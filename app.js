@@ -56,7 +56,6 @@ app.use(expressValidator())
 
 // display home page
 app.get('/', function(req, res) {
-  console.log(req.session)
   res.render('home')
 })
 
@@ -157,7 +156,7 @@ app.post('/login', function(req, res) {
   }
   // authenticate assumes there is a 'users' table with fields 'username'
   // and 'password'
-  authService.authenticate(options, req, res, db);
+  authService.login(options, req, res, db);
 })
 
 // display logout
