@@ -2,7 +2,7 @@ var express = require('express');
 var expressLayouts = require('express-ejs-layouts');
 var low = require('lowdb');
 var bodyParser = require('body-parser');
-const uuid = require('uuid');
+var authService = require('./services/authService');
 
 var app = express();
 
@@ -54,6 +54,28 @@ app.get('/books/:id', function(req, res) {
   }
 
   res.render('book', { book: book || {}, author: author || {}})
+})
+
+// display signup page
+app.get('/signup', function(req, res) {
+  res.render('auth/signup', { errors: [] })
+})
+
+// create user
+app.post('/signup', function(req, res) {
+  // remove extra spaces
+  var username = req.body.username.trim();
+  var password = req.body.password.trim();
+  var password2 = req.body.password2.trim();
+
+  var options = {
+    loginValue: username,
+    password: password,
+    successRedirectUrl: '/',
+    signUpTemplate: 'auth/signup',
+    table: 'users',
+  }
+  authService.signup(options,res);
 })
 
 // start server
