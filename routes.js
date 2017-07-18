@@ -64,7 +64,7 @@ var signup_view_path = path.join('auth', 'signup');
 
 // display signup page
 router.get('/signup', function(req, res) {
-  res.render(signup_view_path, { errors: [] })
+  res.render(signup_view_path)
 })
 
 // create user
@@ -73,6 +73,21 @@ router.post('/signup', function(req, res) {
   var username = req.body.username.trim();
   var password = req.body.password.trim();
   var password2 = req.body.password2.trim();
+
+  // validate form data
+  req.checkBody('username', 'Username must have at least 3 characters').isLength({min: 3});
+  req.checkBody('password', 'Password must have at least 3 characters').isLength({min: 3});
+  req.checkBody('username', 'Username is required').notEmpty();
+  req.checkBody('password', 'Password is required').notEmpty();
+  req.checkBody('password2', 'Confirm password is required').notEmpty();
+  req.checkBody('password', 'Password do not match').equals(password2);
+
+  // check for errors
+  var errors = req.validationErrors();
+  // if there are errors, display signup page
+  if (errors) {
+    return res.render(signup_view_path, {errors: errors.map(function(error) {return error.msg})})
+  }
 
   var options = {
     username: username,

@@ -1,5 +1,13 @@
 <h1>Sign up</h1>
 
+<% if(errors) { %>
+  <div class="alert alert-danger">
+    <% errors.forEach(function(error) { %>
+    <div><%= error %></div>
+    <% }) %>
+  </div>
+<% } %>
+
 <form action="/signup" method="post">
   <div class="form-group">
     <label for="username">Username</label>

@@ -1,6 +1,7 @@
 var express = require('express');
 var expressLayouts = require('express-ejs-layouts');
 var bodyParser = require('body-parser');
+var expressValidator = require('express-validator');
 var routes = require('./routes');
 
 var app = express();
@@ -13,8 +14,18 @@ app.use(expressLayouts);
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(bodyParser.json()); // support json encoded bodies
 
+// form and url validation
+app.use(expressValidator());
+
+// global variables that are available to the views
+app.use(function(request, response, next) {
+  response.locals.errors = null;
+  next();
+})
+
 // routes
 app.use('/', routes);
+
 
 // start server
 app.listen(3000, function(){
