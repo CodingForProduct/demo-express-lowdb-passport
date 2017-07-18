@@ -11,10 +11,30 @@
           <li><a href="/books">Books</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">Link</a></li>
+          <% if(user) { %>
+            <li><a href="/logout">Logout</a></li>
+          <% } else { %>
+            <li><a href="/signup">Signup</a></li>
+            <li><a href="/login">Login</a></li>
+          <% } %>
         </ul>
       </div><!-- /.container-fluid -->
     </nav>
-    <div class="container"><%- body %></div>
+    </ul>
+
+    <div class="container">
+      <% if(error){ %>
+        <div class="alert alert-danger"><%= error %></div>
+      <%}%>
+      <% if(success){ %>
+        <div class="alert alert-success"><%= success %></div>
+      <%}%>
+      <% if(user){ %>
+        <div class="alert alert-success"><%= JSON.stringify( user) %></div>
+      <%}%>
+
+      <%- body %>
+    </div>
   </body>
 </html>
+

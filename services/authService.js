@@ -1,6 +1,7 @@
 var uuid = require('uuid');
 var bcrypt = require('bcryptjs');
 var low = require('lowdb');
+var LocalStrategy   = require('passport-local').Strategy;
 
 var db = low('db.json')
 
@@ -8,6 +9,11 @@ var db = low('db.json')
 function hashPassword(plaintextPassword) {
   var salt = bcrypt.genSaltSync(10);
   return bcrypt.hashSync(plaintextPassword, salt);
+}
+
+// compare if plain text password matches hash password
+exports.comparePassword = function comparePassword(plaintextPassword, hashPassword) {
+  return bcrypt.compareSync(plaintextPassword, hashPassword);
 }
 
 exports.signup = function signup(options, res) {
@@ -35,5 +41,9 @@ exports.signup = function signup(options, res) {
       .write()
     res.redirect(options.successRedirectUrl)
   }
+}
+
+exports.passport = function(passport) {
+
 }
 

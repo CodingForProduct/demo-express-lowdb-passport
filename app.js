@@ -3,12 +3,20 @@ var expressLayouts = require('express-ejs-layouts');
 var low = require('lowdb');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
+var flash = require('connect-flash');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+var uuid = require('uuid');
+var NedbStore = require('connect-nedb-session')(session);
 var authService = require('./services/authService');
+
+var passport = require('passport');
+var LocalStrategy   = require('passport-local').Strategy;
 
 var app = express();
 
 // connect to database
-const db = low('db.json')
+const db = low('data/db.json')
 
 // set view engine
 app.set('view engine', 'ejs');
@@ -18,12 +26,48 @@ app.use(expressLayouts);
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(bodyParser.json()); // support json encoded bodies
 
+// cookie, session, passport is for authentication
+app.use(cookieParser());
+
+// Express Session
+var sess = {
+  secret: 'secret',
+  cookie: {},
+  resave: false,
+  saveUninitialized: false,
+  store: new NedbStore({ filename: 'data/sessionFile.json' }),
+}
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1) // trust first proxy
+  sess.cookie.secure = true // serve secure cookies for https
+}
+app.use(session(sess))
+
+// intialize passport
+app.use(passport.initialize());
+app.use(passport.session());
+
 // add form validation
 app.use(expressValidator())
 
+// use flash; enalbe cookieParser and session before flash
+app.use(flash());
+
+// set variables for the view
+app.use(function(req, res, next) {
+  res.locals.error = req.flash('error')
+  res.locals.success = req.flash('success')
+  res.locals.user = req.user || null;
+  next();
+})
+
+
 // display home page
 app.get('/', function(req, res) {
-  res.render('home')
+  req.flash('error', 'Flash is back!')
+  // console.log('home:' ,req.user)
+  // res.render('home')
+  res.render('home', { error: req.flash('error') });
 })
 
 // display all books
@@ -90,12 +134,83 @@ app.post('/signup', function(req, res) {
   var options = {
     loginValue: username,
     password: password,
-    successRedirectUrl: '/',
+    successRedirectUrl: '/login',
     signUpTemplate: 'auth/signup',
     table: 'users',
   }
   authService.signup(options,res);
 })
+
+// display login page
+app.get('/login', function(req, res) {
+  res.render('auth/login', { errors: [] })
+})
+
+passport.serializeUser(function(user, done) {
+  console.log('serializeUser', user)
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  var user = db.get('users').find({id: id}).value()
+    console.log('deserializeUser:', id, user)
+
+  if(!user) {
+    done({ message: 'Invalid credentials.' }, null);
+  } else {
+    done(null, {id: user.id, username: user.username})
+  }
+});
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    // look for user in database
+    var user = db.get('users').find({ username: username }).value()
+
+    // if user not found, return error
+    if(!user) {
+      console.log('user not found')
+      return done(null, false, { message: 'Invalid user.' });
+    }
+
+    // check if password matches
+    var passwordsMatch = authService.comparePassword(password, user.password);
+    // if passowrd don't match, return error
+    if(!passwordsMatch) {
+      console.log('bad password')
+      return done(null, false, { message: 'Invalid password.' });
+    }
+    console.log('user & password good')
+
+    //else return the user
+    return done(null, user)
+  }
+));
+
+
+
+// display logout
+app.get('/logout', function(req, res) {
+  req.logout();
+  req.flash('success', 'You are logged out');
+  res.redirect('/')
+})
+
+
+// peform login
+app.post(
+  '/login',
+  passport.authenticate(
+    'local',
+    {
+      successRedirect:'/',
+      failureRedirect:'/login',
+      failureFlash: true,
+      successFlash: 'You are logged in',
+    }
+  ),
+)
+
 
 // start server
 app.listen(3000, function(){
