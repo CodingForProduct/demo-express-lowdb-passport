@@ -1,5 +1,11 @@
 {
-  "users": [],
+  "users": [
+    {
+      "username": "user",
+      "id": "91d86b2f-f165-4a3a-bfd8-1aeccdf86a80",
+      "password": "$2a$10$3dV0t7/V4jVoX6BDmdU7auY1GuyxeP31TeqITT4LrCnieveZECuV6"
+    }
+  ],
   "books": [
     {
       "title": "Book One",

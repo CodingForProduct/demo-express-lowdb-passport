@@ -56,4 +56,31 @@ router.get('/books/:id', function(req, res) {
   res.render('book', { book: book || {}, author: author || {}})
 })
 
+//==========================
+// auth routes
+//==========================
+
+var signup_view_path = path.join('auth', 'signup');
+
+// display signup page
+router.get('/signup', function(req, res) {
+  res.render(signup_view_path, { errors: [] })
+})
+
+// create user
+router.post('/signup', function(req, res) {
+  // remove extra spaces
+  var username = req.body.username.trim();
+  var password = req.body.password.trim();
+  var password2 = req.body.password2.trim();
+
+  var options = {
+    username: username,
+    password: password,
+    successRedirectUrl: '/',
+    signUpTemplate: signup_view_path,
+  }
+  authService.signup(options,res);
+})
+
 module.exports = router;
