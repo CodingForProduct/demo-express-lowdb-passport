@@ -56,6 +56,7 @@ app.use(expressValidator())
 
 // display home page
 app.get('/', function(req, res) {
+  console.log(req.session)
   res.render('home')
 })
 
