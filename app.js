@@ -2,6 +2,7 @@ var express = require('express');
 var expressLayouts = require('express-ejs-layouts');
 var low = require('lowdb');
 var bodyParser = require('body-parser');
+var expressValidator = require('express-validator');
 var authService = require('./services/authService');
 
 var app = express();
@@ -16,6 +17,9 @@ app.use(expressLayouts);
 // bodyParser reads a form's input and stores it in request.body
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(bodyParser.json()); // support json encoded bodies
+
+// add form validation
+app.use(expressValidator())
 
 // display home page
 app.get('/', function(req, res) {
@@ -67,6 +71,21 @@ app.post('/signup', function(req, res) {
   var username = req.body.username.trim();
   var password = req.body.password.trim();
   var password2 = req.body.password2.trim();
+
+  // validate form data
+  req.checkBody('username', 'Username must have at least 3 characters').isLength({min: 5});
+  req.checkBody('password', 'Password must have at least 3 characters').isLength({min: 5});
+  req.checkBody('username', 'Username is required').notEmpty();
+  req.checkBody('password', 'Password is required').notEmpty();
+  req.checkBody('password2', 'Confirm password is required').notEmpty();
+  req.checkBody('password', 'Password do not match').equals(password2);
+
+  // check for errors
+  var errors = req.validationErrors();
+  // if there are errors, display signup page
+  if (errors) {
+    return res.render('auth/signup', {errors: errors})
+  }
 
   var options = {
     loginValue: username,
