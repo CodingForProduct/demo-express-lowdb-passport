@@ -3,9 +3,10 @@ var expressLayouts = require('express-ejs-layouts');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var passport = require('passport');
-
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
+var store = require('connect-nedb-session')(session);
+var path = require('path');
 require('./config/environment')
 var routes = require('./routes');
 
@@ -27,6 +28,7 @@ app.use(cookieParser());
 
 // setup sessions
 var sessionOptions = {
+  store: new store({ filename: path.join('data', 'sessionFile.json')}),
   secret: process.env.SESSION_SECRET,
   cookie: {},
   resave: false,

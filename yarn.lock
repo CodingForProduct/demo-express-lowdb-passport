@@ -116,6 +116,10 @@ async-each@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/async-each/-/async-each-1.0.1.tgz#19d386a1d9edc6e7c1c85d388aedbcc56d33602d"
 
+async@~0.2.8:
+  version "0.2.10"
+  resolved "https://registry.yarnpkg.com/async/-/async-0.2.10.tgz#b6bbe0b0674b9d719708ca38de8c237cb526c3d1"
+
 asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
@@ -255,6 +259,12 @@ configstore@^1.0.0:
     uuid "^2.0.1"
     write-file-atomic "^1.1.2"
     xdg-basedir "^2.0.0"
+
+connect-nedb-session@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/connect-nedb-session/-/connect-nedb-session-0.0.3.tgz#e10f642d3d604f609bb23a450021dd1f0579c5ac"
+  dependencies:
+    nedb "0.0.6"
 
 console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   version "1.1.0"
@@ -1029,6 +1039,13 @@ nan@^2.3.0:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.6.2.tgz#e4ff34e6c95fdfb5aecc08de6596f43605a7db45"
 
+nedb@0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/nedb/-/nedb-0.0.6.tgz#a2e6c02cb2fcacf91245b02431f44cf1664aa85f"
+  dependencies:
+    async "~0.2.8"
+    underscore "~1.4.4"
+
 negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
@@ -1598,6 +1615,10 @@ uid-safe@~2.1.4:
 undefsafe@0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/undefsafe/-/undefsafe-0.0.3.tgz#ecca3a03e56b9af17385baac812ac83b994a962f"
+
+underscore@~1.4.4:
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.4.4.tgz#61a6a32010622afa07963bf325203cf12239d604"
 
 unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"
