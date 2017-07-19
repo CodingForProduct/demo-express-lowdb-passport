@@ -260,6 +260,10 @@ configstore@^1.0.0:
     write-file-atomic "^1.1.2"
     xdg-basedir "^2.0.0"
 
+connect-flash@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/connect-flash/-/connect-flash-0.1.1.tgz#d8630f26d95a7f851f9956b1e8cc6732f3b6aa30"
+
 connect-nedb-session@^0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/connect-nedb-session/-/connect-nedb-session-0.0.3.tgz#e10f642d3d604f609bb23a450021dd1f0579c5ac"

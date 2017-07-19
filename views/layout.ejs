@@ -19,6 +19,23 @@
       </div><!-- /.container-fluid -->
     </nav>
 
-    <div class="container"><%- body %></div>
+    <div class="container">
+      <% if(error.length > 0){ %>
+        <div class="alert alert-danger"><%= error %></div>
+      <%}%>
+      <% if(success.length > 0){ %>
+        <div class="alert alert-success"><%= success %></div>
+      <%}%>
+      <%- body %>
+    </div>
+
+    <script>
+    (function(){
+      var flashes = document.querySelectorAll(".alert");
+      flashes.forEach(function(flash){
+        flash.onclick = function() {flash.parentNode.removeChild(flash)};
+      });
+    })()
+  </script>
   </body>
 </html>
