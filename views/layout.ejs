@@ -11,10 +11,14 @@
           <li><a href="/books">Books</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
+          <li class="navbar-text"><%= user && user.username %></li>
           <li><a href="/signup">Sign Up</a></li>
+          <li><a href="/login">Login</a></li>
+          <li><a href="/logout">Logout</a></li>
         </ul>
       </div><!-- /.container-fluid -->
     </nav>
+
     <div class="container"><%- body %></div>
   </body>
 </html>
