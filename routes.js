@@ -118,7 +118,7 @@ router.post(
       failureFlash: true,
       successFlash: 'You are logged in',
     }
-  ),
+  )
 )
 
 // logout user
