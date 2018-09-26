@@ -9,7 +9,7 @@ authService.configurePassport(passport)
 
 // connect to database
 // path.join will take the parameters and create a path using the
-// right type of slashes (\ vs /) based on the operatin system
+// right type of slashes (\ vs /) based on the operating system
 var db = low(path.join('data', 'db.json'));
 
 //==========================
